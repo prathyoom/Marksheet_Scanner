@@ -35,7 +35,6 @@ export const DETAIL_FIELDS = {
   ROLL: "Roll",
   SCHOOL: "School",
   RESULT: "CGPA_Result",
-  SUBJECT: "Subject_Wise_Marks",
 };
 
 export const SUBJECT_FIELDS = {
@@ -51,7 +50,11 @@ export const SUBJECT_FIELDS = {
   PHYSICS: "Physics",
 };
 
-export const FIELDS = {
+type formValue = {
+  [key: string]: string;
+};
+
+export const FIELDS: formValue = {
   ...DETAIL_FIELDS,
   ...SUBJECT_FIELDS,
 };

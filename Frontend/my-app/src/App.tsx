@@ -12,12 +12,6 @@ const ComponentVsPageMap = {
   [PAGES.SEARCH]: SearchPage,
 };
 
-const footerColorVsPageMap = {
-  [PAGES.HOME]: "white",
-  [PAGES.UPLOAD]: "black",
-  [PAGES.SEARCH]: "black",
-};
-
 const App = () => {
   const [page, setPage] = useState(PAGES.HOME);
   const PageComponent = ComponentVsPageMap[page];
@@ -30,7 +24,7 @@ const App = () => {
   return (
     <div className="h-screen w-screen">
       <PageComponent handleAction={handleAction} />
-      <Footer color={footerColorVsPageMap[page]} />
+      <Footer color={page} />
     </div>
   );
 };

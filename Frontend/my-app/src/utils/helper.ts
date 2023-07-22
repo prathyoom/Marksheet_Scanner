@@ -11,7 +11,7 @@ const getString = (word: string) => {
 
 const getValue = (word?: string) => {
   if (word) {
-    return wordsToNumbers(getString(word));
+    return String(wordsToNumbers(getString(word)));
   }
   return "";
 };
@@ -54,6 +54,10 @@ export const getConfig = ({ record }: { record?: Record }) => {
   ];
 };
 
+type formValue = {
+  [key: string]: string;
+};
+
 export const adaptFormValues = ({
   columns,
   values,
@@ -66,12 +70,47 @@ export const adaptFormValues = ({
   }
   columns = columns.replace(/[^a-zA-Z_,]/g, "");
   values = values.replace(/[^a-zA-Z_\s,]/g, "");
-  const colArray = columns?.split(",");
-  const valArray = values?.split(",");
+  const colArray = columns.split(",");
+  const valArray = values.split(",");
+  const subjectArray = Object.values(SUBJECT_FIELDS);
+
+  const formValue: formValue = colArray.reduce((acc, key, index) => {
+    if (subjectArray.includes(key)) acc[key] = getValue(valArray[index]);
+    else acc[key] = valArray[index];
+    return acc;
+  }, {} as formValue);
+
+  return formValue as Record;
+};
+
+type keyType = keyof typeof EMPTY_RECORD;
+
+export const adaptOutputFields = ({ data }: { data: Record }) => {
   const keys = Object.keys(FIELDS);
-  const formValue = keys.reduce((result: any, key: string) => {
-    result[key] = valArray[colArray.indexOf(key)];
-    return result;
-  }, {} as { [key: string]: string });
-  return formValue;
+
+  const columns = keys.reduce((acc, key) => {
+    acc.push((FIELDS[key] as string) ?? "");
+    return acc;
+  }, [] as String[]);
+
+  const values = keys.reduce((acc, key) => {
+    acc.push((data[FIELDS[key] as keyType] as string) ?? "");
+    return acc;
+  }, [] as String[]);
+
+  let columns_string = columns.reduce((acc, key) => {
+    return acc.concat(key.toString()) + "`,`";
+  }, "" as string);
+
+  let values_string = values.reduce((acc, key) => {
+    return acc.concat(key.toString()) + "','";
+  }, "" as string);
+
+  columns_string = "`" + columns_string;
+  columns_string = columns_string.substring(0, columns_string.length - 2);
+
+  values_string = "'" + values_string;
+  values_string = values_string.substring(0, values_string.length - 2);
+
+  return { values: values_string, columns: columns_string };
 };
