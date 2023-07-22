@@ -21,6 +21,7 @@ function storeMarksheet($formInput)
     $columns = $formInput['columns'];
     $values = $formInput['values'];
     $query = "INSERT INTO `student-details` ($columns) VALUES ($values)";
+
     $result = mysqli_query($conn, $query);
 
     if (!empty($result)) {
@@ -63,14 +64,15 @@ function processMarksheet($formInput, $marksheetInput)
 
         move_uploaded_file($_FILES['image']['tmp_name'], "./images/$image_name");
 
-        $details_command_exec = escapeshellcmd('C:\Python311\python.exe D:\Xampp\htdocs\php-api\marksheet\test_1.py');
+        $details_command_exec = escapeshellcmd('C:\Python311\python.exe D:\Xampp\htdocs\php-api\marksheet\ml\details.py');
         exec($details_command_exec);
+
         $details_columns = "`First_Name`, `Last_Name`, `Marksheet_Image`, `Board`, `Guardian_Name`, `Roll`, `Date_of_Birth`, `School`, `CGPA_Result`";
         $details_file = fopen("./output_details.csv", "r");
         $details_csv_data = fgetcsv($details_file, 1000, ',');
         $details_values = "'" . implode("','", $details_csv_data) . "'";
 
-        $marks_command_exec = escapeshellcmd('C:\Python311\python.exe D:\Xampp\htdocs\php-api\marksheet\subjects.py');
+        $marks_command_exec = escapeshellcmd('C:\Python311\python.exe D:\Xampp\htdocs\php-api\marksheet\ml\subjects.py');
         exec($marks_command_exec);
 
         $marks_columnns_file = fopen("./output_marks_columns.csv", "r");

@@ -16,10 +16,9 @@ if ($requestMethod == "POST") {
     if (empty($_FILES)) {
         error422('Upload Marksheet');
     } else {
-        $storeMarksheet = processMarksheet($_POST, $_FILES);
+        $processMarksheet = processMarksheet($_POST, $_FILES);
     }
-
-    echo $storeMarksheet;
+    echo $processMarksheet;
 } else {
     $data = [
         'status' => 405,

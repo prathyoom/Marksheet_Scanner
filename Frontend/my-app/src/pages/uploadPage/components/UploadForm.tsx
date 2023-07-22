@@ -99,7 +99,7 @@ const Form = () => {
     })
       .then((response) => response.json())
       .then((res) => {
-        const { columns, values } = res;
+        const { columns, values } = res ?? {};
         setData(
           adaptFormValues({
             columns,

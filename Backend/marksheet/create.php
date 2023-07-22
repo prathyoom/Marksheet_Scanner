@@ -13,6 +13,7 @@ $requestMethod = $_SERVER["REQUEST_METHOD"];
 
 if ($requestMethod == "POST") {
     $storeMarksheet = storeMarksheet($_POST);
+    echo $storeMarksheet;
 } else {
     $data = [
         'status' => 405,
