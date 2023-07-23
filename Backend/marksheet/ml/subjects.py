@@ -45,13 +45,13 @@ def preprocess(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # denoising
-    img = cv2.fastNlMeansDenoising(img, None, 1, 7, 21)
+    img = cv2.fastNlMeansDenoising(img, None, 3, 7, 21)
 
     # scaling image
-    img = cv2.resize(img, None, fx=3.5, fy=3.5, interpolation=cv2.INTER_LINEAR)
+    img = cv2.resize(img, None, fx=3.5, fy=3.5, interpolation=cv2.INTER_NEAREST)
 
     # Otsu binarisation
-    blur = cv2.GaussianBlur(img, (1, 1), 0)
+    blur = cv2.GaussianBlur(img, (3, 3), 0)
     ret3, img = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     processed_img = img
 
@@ -226,7 +226,6 @@ def main():
             config="-l eng -c preserve_interword_spaces=1 output-preserve-enabled",
         )
         ans = postprocess(mystring)
-
         # getting subjects and marks
         for k in keywords:
             if k in ans and len(ans[k]) > 0:
